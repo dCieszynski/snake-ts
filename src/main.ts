@@ -1,6 +1,7 @@
 const gameScreen = document.querySelector(".game__screen");
-const snakeHeadPos = 41;
-const snakeTailPos = snakeHeadPos;
+let snakeHeadPos = 41;
+let snakeTailPos = snakeHeadPos;
+let dir = 0;
 
 const levelWidth: number = 9;
 const levelHeight: number = 9;
@@ -18,10 +19,30 @@ const renderLevel = () => {
 };
 
 const renderSnake = () => {
-  const headCell = document.querySelector(`#cell_${snakeHeadPos}`);
+  document.querySelector(`#cell_${snakeTailPos}`)?.classList.remove("snake");
+  snakeTailPos = snakeTailPos + dir;
   const tailCell = document.querySelector(`#cell_${snakeTailPos}`);
+  snakeHeadPos = snakeHeadPos + dir;
+  const headCell = document.querySelector(`#cell_${snakeHeadPos}`);
   headCell?.classList.add("snake");
   tailCell?.classList.add("snake");
 };
 
 renderLevel();
+setInterval(renderSnake, 1000);
+
+window.addEventListener("keyup", (e) => {
+  switch (e.key) {
+    case "ArrowLeft":
+      dir = -1;
+      break;
+    case "ArrowRight":
+      dir = 1;
+      break;
+    case "ArrowUp":
+      dir = -levelWidth;
+      break;
+    case "ArrowDown":
+      dir = levelWidth;
+  }
+});
