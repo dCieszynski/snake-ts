@@ -1,9 +1,9 @@
 const gameScreen = document.querySelector(".game__screen");
-const levelWidth: number = 9;
-const levelHeight: number = 9;
+const levelWidth: number = 10;
+const levelHeight: number = 10;
 const levelSize = levelWidth * levelHeight;
 
-let snakeHeadPos = 41;
+let snakeHeadPos = 45;
 let snakeTailPos = snakeHeadPos;
 let dir = 0;
 
@@ -36,8 +36,30 @@ const renderSnake = () => {
   tailCell?.classList.add("snake");
 };
 
+const checkCollision = () => {
+  if (
+    document
+      .querySelector(`cell_${snakeHeadPos + dir}`)
+      ?.classList.contains("snake") ||
+    (snakeHeadPos - levelWidth <= 0 && dir === -levelWidth) ||
+    (snakeHeadPos + levelWidth >= levelSize && dir === levelWidth) ||
+    (snakeHeadPos % levelWidth === 0 && dir === 1) ||
+    (snakeHeadPos % levelWidth === 1 && dir === -1)
+  ) {
+    return true;
+  } else return false;
+};
+
+const move = () => {
+  if (checkCollision()) {
+    alert("You loose");
+  } else {
+    renderSnake();
+  }
+};
+
 renderLevel();
-setInterval(renderSnake, 1000);
+setInterval(move, 1000);
 
 window.addEventListener("keyup", (e) => {
   switch (e.key) {
