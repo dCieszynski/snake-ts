@@ -1,11 +1,11 @@
 const gameScreen = document.querySelector(".game__screen");
-let snakeHeadPos = 41;
-let snakeTailPos = snakeHeadPos;
-let dir = 0;
-
 const levelWidth: number = 9;
 const levelHeight: number = 9;
 const levelSize = levelWidth * levelHeight;
+
+let snakeHeadPos = 41;
+let snakeTailPos = snakeHeadPos;
+let dir = 0;
 
 const renderLevel = () => {
   for (let i = 1; i <= levelSize; i++) {
@@ -14,8 +14,16 @@ const renderLevel = () => {
     cell.setAttribute("id", `cell_${i}`);
     gameScreen?.appendChild(cell);
   }
-
+  renderApple();
   renderSnake();
+};
+
+const renderApple = () => {
+  let applePos = Math.floor(Math.random() * (levelSize + 1));
+  if (document.querySelector(".apple")) {
+    document.querySelector(`.apple`)?.classList.remove("apple");
+  }
+  document.querySelector(`#cell_${applePos}`)?.classList.add("apple");
 };
 
 const renderSnake = () => {

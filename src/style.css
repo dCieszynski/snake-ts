@@ -30,6 +30,10 @@ html {
   height: 50px;
 }
 
+.apple {
+  background-color: red;
+}
+
 .snake {
   background-color: green;
 }
