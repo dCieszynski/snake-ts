@@ -15,7 +15,8 @@ const renderLevel = () => {
     gameScreen?.appendChild(cell);
   }
   renderApple();
-  renderSnake();
+  moveSnakeTail();
+  moveSnakeHead();
 };
 
 const renderApple = () => {
@@ -26,14 +27,17 @@ const renderApple = () => {
   document.querySelector(`#cell_${applePos}`)?.classList.add("apple");
 };
 
-const renderSnake = () => {
+const moveSnakeTail = () => {
   document.querySelector(`#cell_${snakeTailPos}`)?.classList.remove("snake");
   snakeTailPos = snakeTailPos + dir;
   const tailCell = document.querySelector(`#cell_${snakeTailPos}`);
+  tailCell?.classList.add("snake");
+};
+
+const moveSnakeHead = () => {
   snakeHeadPos = snakeHeadPos + dir;
   const headCell = document.querySelector(`#cell_${snakeHeadPos}`);
   headCell?.classList.add("snake");
-  tailCell?.classList.add("snake");
 };
 
 const checkCollision = () => {
@@ -47,19 +51,34 @@ const checkCollision = () => {
     (snakeHeadPos % levelWidth === 1 && dir === -1)
   ) {
     return true;
-  } else return false;
+  } else {
+    return false;
+  }
 };
 
-const move = () => {
+const checkApple = () => {
+  if (
+    document.querySelector(`#cell_${snakeHeadPos}`)?.classList.contains("apple")
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const gameProcess = () => {
   if (checkCollision()) {
     alert("You loose");
   } else {
-    renderSnake();
+    moveSnakeHead();
+    if (!checkApple()) {
+      moveSnakeTail();
+    }
   }
 };
 
 renderLevel();
-setInterval(move, 1000);
+setInterval(gameProcess, 1000);
 
 window.addEventListener("keyup", (e) => {
   switch (e.key) {
