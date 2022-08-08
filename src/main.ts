@@ -78,6 +78,10 @@ const eatApple = (cells: NodeListOf<HTMLDivElement>, tail: number) => {
     cells[currentSnake[0]].classList.remove("apple");
     cells[tail].classList.add("snake");
     currentSnake.push(tail);
+    if (scoreDisplay !== null) {
+      score += 100;
+      scoreDisplay.innerText = `${score}`;
+    }
     renderApple(cells);
     clearInterval(interval);
     intervalTime = intervalTime * speed;
