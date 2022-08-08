@@ -3,9 +3,19 @@ const levelWidth: number = 10;
 const levelHeight: number = 10;
 const levelSize = levelWidth * levelHeight;
 
-let snakeHeadPos = 45;
-let snakeTailPos = snakeHeadPos;
-let dir = 0;
+let currentIndex = 0;
+let appleIndex = 0;
+let currentSnake = [3, 2, 1];
+let dir = 1;
+let intervalTime = 1000;
+let interval = 0;
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("keyup", input);
+  renderLevel();
+  startGame();
+  //playAgain.addEventListener("click", replay);
+});
 
 const renderLevel = () => {
   for (let i = 1; i <= levelSize; i++) {
@@ -14,41 +24,46 @@ const renderLevel = () => {
     cell.setAttribute("id", `cell_${i}`);
     gameScreen?.appendChild(cell);
   }
-  renderApple();
-  moveSnakeTail();
-  moveSnakeHead();
 };
 
-const renderApple = () => {
-  let applePos = Math.floor(Math.random() * (levelSize + 1));
-  if (document.querySelector(".apple")) {
-    document.querySelector(`.apple`)?.classList.remove("apple");
+const startGame = () => {
+  let cells = document.querySelectorAll(".cell");
+  renderApple(cells);
+  currentSnake.forEach((index) => {
+    cells[index].classList.add("snake");
+  });
+  interval = setInterval(moveProcess, intervalTime);
+};
+
+const moveProcess = () => {
+  let cells = document.querySelectorAll(".cell");
+  if (checkCollision()) {
+    alert("You lose!");
+  } else {
+    moveSnake(cells);
   }
-  document.querySelector(`#cell_${applePos}`)?.classList.add("apple");
 };
 
-const moveSnakeTail = () => {
-  document.querySelector(`#cell_${snakeTailPos}`)?.classList.remove("snake");
-  snakeTailPos = snakeTailPos + dir;
-  const tailCell = document.querySelector(`#cell_${snakeTailPos}`);
-  tailCell?.classList.add("snake");
-};
-
-const moveSnakeHead = () => {
-  snakeHeadPos = snakeHeadPos + dir;
-  const headCell = document.querySelector(`#cell_${snakeHeadPos}`);
-  headCell?.classList.add("snake");
+const moveSnake = (cells: any) => {
+  let tail = currentSnake.pop();
+  if (tail) {
+    cells[tail].classList.remove("snake");
+    currentSnake.unshift(currentSnake[0] + dir);
+    // movement ends here
+    eatApple(cells, tail);
+    cells[currentSnake[0]].classList.add("snake");
+  }
 };
 
 const checkCollision = () => {
   if (
     document
-      .querySelector(`cell_${snakeHeadPos + dir}`)
+      .querySelector(`cell_${currentSnake[0] + dir}`)
       ?.classList.contains("snake") ||
-    (snakeHeadPos - levelWidth <= 0 && dir === -levelWidth) ||
-    (snakeHeadPos + levelWidth >= levelSize && dir === levelWidth) ||
-    (snakeHeadPos % levelWidth === 0 && dir === 1) ||
-    (snakeHeadPos % levelWidth === 1 && dir === -1)
+    (currentSnake[0] - levelWidth <= 0 && dir === -levelWidth) ||
+    (currentSnake[0] + levelWidth >= levelSize && dir === levelWidth) ||
+    (currentSnake[0] % levelWidth === 0 && dir === 1) ||
+    (currentSnake[0] % levelWidth === 1 && dir === -1)
   ) {
     return true;
   } else {
@@ -56,31 +71,25 @@ const checkCollision = () => {
   }
 };
 
-const checkApple = () => {
-  if (
-    document.querySelector(`#cell_${snakeHeadPos}`)?.classList.contains("apple")
-  ) {
-    return true;
-  } else {
-    return false;
+const eatApple = (cells: any, tail: any) => {
+  if (cells[currentSnake[0]].classList.contains("apple")) {
+    cells[currentSnake[0]].classList.remove("apple");
+    cells[tail].classList.add("snake");
+    currentSnake.push(tail);
+    renderApple(cells);
+    clearInterval(interval);
+    interval = setInterval(moveProcess, intervalTime);
   }
 };
 
-const gameProcess = () => {
-  if (checkCollision()) {
-    alert("You loose");
-  } else {
-    moveSnakeHead();
-    if (!checkApple()) {
-      moveSnakeTail();
-    }
-  }
+const renderApple = (cells: any) => {
+  do {
+    appleIndex = Math.floor(Math.random() * cells.length);
+  } while (cells[appleIndex].classList.contains("snake"));
+  cells[appleIndex].classList.add("apple");
 };
 
-renderLevel();
-setInterval(gameProcess, 1000);
-
-window.addEventListener("keyup", (e) => {
+const input = (e: any) => {
   switch (e.key) {
     case "ArrowLeft":
       dir = -1;
@@ -94,4 +103,4 @@ window.addEventListener("keyup", (e) => {
     case "ArrowDown":
       dir = levelWidth;
   }
-});
+};
