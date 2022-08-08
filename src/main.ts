@@ -1,14 +1,14 @@
 const gameScreen = document.querySelector<HTMLDivElement>(".game__screen");
 const scoreDisplay = document.querySelector<HTMLSpanElement>("#score");
-const levelWidth: number = 10;
-const levelHeight: number = 10;
+const levelWidth = 10;
+const levelHeight = 10;
 const levelSize = levelWidth * levelHeight;
 
 let currentIndex = 0;
 let appleIndex = 0;
 let currentSnake = [2, 1, 0];
 let dir = 1;
-let intervalTime = 1000;
+let intervalTime = 800;
 let speed = 0.9;
 let interval = 0;
 let score = 0;
@@ -61,11 +61,11 @@ const moveSnake = (cells: NodeListOf<HTMLDivElement>) => {
 
 const checkCollision = (cells: NodeListOf<HTMLDivElement>) => {
   if (
-    cells[currentSnake[0] + dir].classList.contains("snake") ||
     (currentSnake[0] - levelWidth <= 0 && dir === -levelWidth) ||
     (currentSnake[0] + levelWidth >= levelSize && dir === levelWidth) ||
     (currentSnake[0] % levelWidth === levelWidth - 1 && dir === 1) ||
-    (currentSnake[0] % levelWidth === 0 && dir === -1)
+    (currentSnake[0] % levelWidth === 0 && dir === -1) ||
+    cells[currentSnake[0] + dir].classList.contains("snake")
   ) {
     return true;
   } else {
