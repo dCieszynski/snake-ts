@@ -14,7 +14,7 @@ let speed = 0.9;
 let interval = 0;
 let score = 0;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   btnPlay?.addEventListener("click", () => {
     document.addEventListener("keyup", getInput);
     if (gameScreen !== null) gameScreen.innerHTML = "";
