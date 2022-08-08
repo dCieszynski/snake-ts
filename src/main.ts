@@ -5,19 +5,20 @@ const levelSize = levelWidth * levelHeight;
 
 let currentIndex = 0;
 let appleIndex = 0;
-let currentSnake = [3, 2, 1];
+let currentSnake = [2, 1, 0];
 let dir = 1;
 let intervalTime = 1000;
+let speed = 0.9;
 let interval = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
-  document.addEventListener("keyup", input);
+  document.addEventListener("keyup", getInput);
   renderLevel();
   startGame();
 });
 
 const renderLevel = () => {
-  for (let i = 1; i <= levelSize; i++) {
+  for (let i = 0; i < levelSize; i++) {
     const cell = document.createElement("div");
     cell.classList.add("cell");
     cell.setAttribute("id", `cell_${i}`);
@@ -45,7 +46,7 @@ const moveProcess = () => {
 
 const moveSnake = (cells: NodeListOf<HTMLDivElement>) => {
   let tail = currentSnake.pop();
-  if (tail) {
+  if (tail !== undefined) {
     cells[tail].classList.remove("snake");
     currentSnake.unshift(currentSnake[0] + dir);
     eatApple(cells, tail);
@@ -74,6 +75,7 @@ const eatApple = (cells: NodeListOf<HTMLDivElement>, tail: number) => {
     currentSnake.push(tail);
     renderApple(cells);
     clearInterval(interval);
+    intervalTime = intervalTime * speed;
     interval = setInterval(moveProcess, intervalTime);
   }
 };
@@ -85,7 +87,7 @@ const renderApple = (cells: NodeListOf<HTMLDivElement>) => {
   cells[appleIndex].classList.add("apple");
 };
 
-const input = (e: KeyboardEvent) => {
+const getInput = (e: KeyboardEvent) => {
   switch (e.key) {
     case "ArrowLeft":
       dir = -1;
