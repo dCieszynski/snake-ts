@@ -1,4 +1,4 @@
-const gameScreen = document.querySelector(".game__screen");
+const gameScreen = document.querySelector<HTMLDivElement>(".game__screen");
 const levelWidth: number = 10;
 const levelHeight: number = 10;
 const levelSize = levelWidth * levelHeight;
@@ -26,7 +26,7 @@ const renderLevel = () => {
 };
 
 const startGame = () => {
-  let cells = document.querySelectorAll(".cell");
+  let cells = document.querySelectorAll<HTMLDivElement>(".cell");
   renderApple(cells);
   currentSnake.forEach((index) => {
     cells[index].classList.add("snake");
@@ -35,7 +35,7 @@ const startGame = () => {
 };
 
 const moveProcess = () => {
-  let cells = document.querySelectorAll(".cell");
+  let cells = document.querySelectorAll<HTMLDivElement>(".cell");
   if (checkCollision(cells)) {
     alert("You lose!");
   } else {
@@ -43,7 +43,7 @@ const moveProcess = () => {
   }
 };
 
-const moveSnake = (cells: any) => {
+const moveSnake = (cells: NodeListOf<HTMLDivElement>) => {
   let tail = currentSnake.pop();
   if (tail) {
     cells[tail].classList.remove("snake");
@@ -53,7 +53,7 @@ const moveSnake = (cells: any) => {
   }
 };
 
-const checkCollision = (cells: any) => {
+const checkCollision = (cells: NodeListOf<HTMLDivElement>) => {
   if (
     cells[currentSnake[0] + dir].classList.contains("snake") ||
     (currentSnake[0] - levelWidth <= 0 && dir === -levelWidth) ||
@@ -67,7 +67,7 @@ const checkCollision = (cells: any) => {
   }
 };
 
-const eatApple = (cells: any, tail: any) => {
+const eatApple = (cells: NodeListOf<HTMLDivElement>, tail: number) => {
   if (cells[currentSnake[0]].classList.contains("apple")) {
     cells[currentSnake[0]].classList.remove("apple");
     cells[tail].classList.add("snake");
@@ -78,14 +78,14 @@ const eatApple = (cells: any, tail: any) => {
   }
 };
 
-const renderApple = (cells: any) => {
+const renderApple = (cells: NodeListOf<HTMLDivElement>) => {
   do {
     appleIndex = Math.floor(Math.random() * cells.length);
   } while (cells[appleIndex].classList.contains("snake"));
   cells[appleIndex].classList.add("apple");
 };
 
-const input = (e: any) => {
+const input = (e: KeyboardEvent) => {
   switch (e.key) {
     case "ArrowLeft":
       dir = -1;
