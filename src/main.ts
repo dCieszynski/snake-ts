@@ -36,7 +36,7 @@ const startGame = () => {
 
 const moveProcess = () => {
   let cells = document.querySelectorAll(".cell");
-  if (checkCollision()) {
+  if (checkCollision(cells)) {
     alert("You lose!");
   } else {
     moveSnake(cells);
@@ -48,21 +48,18 @@ const moveSnake = (cells: any) => {
   if (tail) {
     cells[tail].classList.remove("snake");
     currentSnake.unshift(currentSnake[0] + dir);
-    // movement ends here
     eatApple(cells, tail);
     cells[currentSnake[0]].classList.add("snake");
   }
 };
 
-const checkCollision = () => {
+const checkCollision = (cells: any) => {
   if (
-    document
-      .querySelector(`cell_${currentSnake[0] + dir}`)
-      ?.classList.contains("snake") ||
+    cells[currentSnake[0] + dir].classList.contains("snake") ||
     (currentSnake[0] - levelWidth <= 0 && dir === -levelWidth) ||
     (currentSnake[0] + levelWidth >= levelSize && dir === levelWidth) ||
-    (currentSnake[0] % levelWidth === 0 && dir === 1) ||
-    (currentSnake[0] % levelWidth === 1 && dir === -1)
+    (currentSnake[0] % levelWidth === levelWidth - 1 && dir === 1) ||
+    (currentSnake[0] % levelWidth === 0 && dir === -1)
   ) {
     return true;
   } else {
