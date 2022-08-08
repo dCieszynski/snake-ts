@@ -58,6 +58,7 @@ const moveProcess = () => {
   let cells = document.querySelectorAll<HTMLDivElement>(".cell");
   if (checkCollision(cells)) {
     alert("You lose!");
+    return clearInterval(interval);
   } else {
     moveSnake(cells);
   }
