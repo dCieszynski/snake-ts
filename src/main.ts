@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("keyup", input);
   renderLevel();
   startGame();
-  //playAgain.addEventListener("click", replay);
 });
 
 const renderLevel = () => {
