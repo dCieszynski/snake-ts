@@ -1,4 +1,5 @@
 const gameScreen = document.querySelector<HTMLDivElement>(".game__screen");
+const scoreDisplay = document.querySelector<HTMLSpanElement>("#score");
 const levelWidth: number = 10;
 const levelHeight: number = 10;
 const levelSize = levelWidth * levelHeight;
@@ -10,6 +11,7 @@ let dir = 1;
 let intervalTime = 1000;
 let speed = 0.9;
 let interval = 0;
+let score = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("keyup", getInput);
@@ -32,6 +34,9 @@ const startGame = () => {
   currentSnake.forEach((index) => {
     cells[index].classList.add("snake");
   });
+  if (scoreDisplay !== null) {
+    scoreDisplay.innerText = `${score}`;
+  }
   interval = setInterval(moveProcess, intervalTime);
 };
 
